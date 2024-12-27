@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "852741546425",
+    "firebase_url": "https://st-inventory-5dd91-default-rtdb.firebaseio.com",
+    "project_id": "st-inventory-5dd91",
+    "storage_bucket": "st-inventory-5dd91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852741546425:android:5ae0306af956615f825668",
+        "android_client_info": {
+          "package_name": "com.stpos.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD36o45KcG7jqQLUP55mWOpHDQnNHKWU1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
