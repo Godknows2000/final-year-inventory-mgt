@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:salespro_admin/Language/language_provider.dart';
 import 'package:salespro_admin/Screen/Authentication/log_in.dart';
 import 'package:salespro_admin/Screen/Inventory%20Sales/inventory_sales.dart';
+import 'package:salespro_admin/Screen/POS%20Sale/shift_management.dart';
 import 'package:salespro_admin/Screen/Subscription/payment.dart';
 import 'package:salespro_admin/Screen/Subscription/purchase_plan.dart';
 import 'package:salespro_admin/Screen/Subscription/subscription_plan_page.dart';
@@ -132,6 +133,7 @@ class MyApp extends StatelessWidget {
                       EmailLogIn.route: (context) => const EmailLogIn(),
                       MtHomeScreen.route: (context) => const MtHomeScreen(),
                       PosSale.route: (context) => const PosSale(),
+                      "/shiftManagement": (context) => const ShiftManagement(),
                       Purchase.route: (context) => const Purchase(),
                       Product.route: (context) => const Product(),
                       InventorySales.route: (context) => const InventorySales(),
