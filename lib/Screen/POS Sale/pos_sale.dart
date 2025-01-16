@@ -405,6 +405,12 @@ class _PosSaleState extends State<PosSale> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (SessionManager.currentShift == null ||
+        SessionManager.currentShift!.closeAmount != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamed(context, ShiftManagement.route);
+      });
+    }
     checkCurrentUserAndRestartApp();
     // getConnectivity();
     checkInternet();
@@ -838,9 +844,7 @@ class _PosSaleState extends State<PosSale> {
     List<String> allProductsCodeList = [];
     List<String> warehouseIdList = [];
     List<WarehouseBasedProductModel> warehouseBasedProductModel = [];
-    if (!(SessionManager.currentShift?.closeAmount != null)) {
-      Navigator.pushNamed(context, "/shiftManagement");
-    }
+
     return Consumer(
       builder: (context, consumerRef, __) {
         final wareHouseList = consumerRef.watch(warehouseProvider);
@@ -1070,7 +1074,49 @@ class _PosSaleState extends State<PosSale> {
                                         child: CircularProgressIndicator(),
                                       );
                                     },
-                                  )
+                                  ),
+                                  const SizedBox(width: 15),
+                                  Expanded(
+                                    child: Card(
+                                        color: Colors.red,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          side: const BorderSide(
+                                              color: kLitGreyColor),
+                                        ),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: const BoxDecoration(),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                                size: 18.0,
+                                              ),
+                                              const SizedBox(width: 4.0),
+                                              Flexible(
+                                                child: Text(
+                                                  "Close shift",
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: kTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )).onTap(() => Navigator.of(
+                                            context)
+                                        .pushNamed(ShiftManagement.route)),
+                                  ),
                                 ],
                               ),
 
