@@ -968,6 +968,123 @@ FutureOr<Uint8List> generateSaleDocument(
   return doc.save();
 }
 
+FutureOr<Uint8List> generateSaleDocument58mm(
+    {required SaleTransactionModel transactions,
+    required PersonalInformationModel personalInformation}) async {
+  final pw.Document doc = pw.Document();
+  double totalAmount({required SaleTransactionModel transactions}) {
+    double amount = 0;
+
+    for (var element in transactions.productList!) {
+      amount = amount +
+          double.parse(element.subTotal) *
+              double.parse(element.quantity.toString());
+    }
+
+    return double.parse(amount.toStringAsFixed(2));
+  }
+
+  doc.addPage(
+    pw.Page(
+      pageFormat: const PdfPageFormat(
+          58 * PdfPageFormat.mm, double.infinity), // 58mm width
+      build: (context) {
+        return pw.Padding(
+          padding: const pw.EdgeInsets.all(8.0),
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text(personalInformation.companyName,
+                  style: pw.TextStyle(
+                      fontSize: 12, fontWeight: pw.FontWeight.bold)),
+              pw.Text('Phone: ${personalInformation.phoneNumber}',
+                  style: pw.TextStyle(fontSize: 10)),
+
+              pw.Text('Address: ${personalInformation.countryName}',
+                  style: pw.TextStyle(fontSize: 10)),
+              pw.SizedBox(height: 10),
+
+              ///________Bill/Invoice_________________________________________________________
+              pw.Container(
+                width: double.infinity,
+                padding: const pw.EdgeInsets.all(10.0),
+                child: pw.Center(
+                    child: pw.Container(
+                        decoration: pw.BoxDecoration(
+                          border:
+                              pw.Border.all(color: PdfColors.black, width: 0.5),
+                          borderRadius:
+                              const pw.BorderRadius.all(pw.Radius.circular(10)),
+                        ),
+                        child: pw.Padding(
+                          padding: const pw.EdgeInsets.only(
+                              top: 2.0, bottom: 2, left: 5, right: 5),
+                          child: pw.Text(
+                            'Bill/Invoice',
+                            style: pw.Theme.of(context)
+                                .defaultTextStyle
+                                .copyWith(
+                                    color: PdfColors.black,
+                                    fontSize: 12.0,
+                                    fontWeight: pw.FontWeight.bold),
+                          ),
+                        ))),
+              ),
+              pw.Divider(),
+              pw.Text(
+                  'Date: ${DateFormat.yMd().format(DateTime.parse(transactions.purchaseDate))}, ${DateFormat.jm().format(DateTime.parse(transactions.purchaseDate))}',
+                  style: pw.TextStyle(fontSize: 10)),
+              pw.Text('Receipt: #${transactions.invoiceNumber}',
+                  style: pw.TextStyle(fontSize: 10)),
+              pw.SizedBox(height: 10),
+              pw.SizedBox(height: 10),
+              pw.Divider(),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text('Item', style: pw.TextStyle(fontSize: 10)),
+                  pw.Text('Qty', style: pw.TextStyle(fontSize: 10)),
+                  pw.Text('Price', style: pw.TextStyle(fontSize: 10)),
+                ],
+              ),
+              pw.Divider(),
+              pw.ListView.builder(
+                itemCount: transactions.productList!.length,
+                itemBuilder: (context, index) {
+                  var item = transactions.productList![index];
+                  return pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text(
+                          '${item.productName!} @\$${item.subTotal.toString()}',
+                          style: pw.TextStyle(fontSize: 10)),
+                      pw.Text(item.quantity.toString(),
+                          style: pw.TextStyle(fontSize: 10)),
+                      pw.Text(
+                          '\$${myFormat.format(double.tryParse((double.parse(item.subTotal) * item.quantity.toInt()).toStringAsFixed(2)))}',
+                          style: pw.TextStyle(fontSize: 10)),
+                    ],
+                  );
+                },
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(),
+              pw.Text('Total: \$${totalAmount(transactions: transactions)}',
+                  style: pw.TextStyle(fontSize: 12)),
+              pw.Divider(),
+              pw.Text('Thank you for shopping with us!',
+                  textAlign: pw.TextAlign.center,
+                  style: pw.TextStyle(fontSize: 10)),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+
+  return doc.save();
+}
+
 // FutureOr<Uint8List> generateSaleDocumentStyle2({required SaleTransactionModel transactions, required PersonalInformationModel personalInformation}) async {
 //   final pw.Document doc = pw.Document();
 //   final netImage = await networkImage(

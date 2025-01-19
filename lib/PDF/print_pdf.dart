@@ -19,6 +19,7 @@ import 'package:salespro_admin/Screen/Ledger%20Screen/ledger_screen.dart';
 import 'package:salespro_admin/commas.dart';
 import 'package:salespro_admin/currency.dart';
 import 'package:salespro_admin/model/personal_information_model.dart';
+import 'package:salespro_admin/session_manager.dart';
 import '../Screen/Inventory Sales/inventory_sales.dart';
 import '../Screen/POS Sale/pos_sale.dart';
 import '../Screen/Purchase/purchase.dart';
@@ -57,9 +58,13 @@ class GeneratePdfAndPrint {
       BuildContext? context,
       bool? fromInventorySale}) async {
     EasyLoading.show(status: 'Generating PDF...', dismissOnTap: true);
-    var pdfData = await generateSaleDocument(
-        personalInformation: personalInformationModel,
-        transactions: saleTransactionModel);
+    var pdfData = SessionManager.isA4
+        ? await generateSaleDocument(
+            personalInformation: personalInformationModel,
+            transactions: saleTransactionModel)
+        : await generateSaleDocument58mm(
+            personalInformation: personalInformationModel,
+            transactions: saleTransactionModel);
     //Convert unint8List to pdf and upload in to firebase storage
     await uploadPdfToFirebase(
         pdfData, 'sale', saleTransactionModel.invoiceNumber);

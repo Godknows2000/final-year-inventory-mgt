@@ -218,6 +218,38 @@ class _PosSaleState extends State<PosSale> {
     );
   }
 
+  List<String> printOptions = [
+    'A4',
+    'Thermal (58mm)',
+  ];
+
+  String selectedPrintOption = SessionManager.isA4 ? 'A4' : 'Thermal (58mm)';
+  DropdownButton<String> getPrintOptions() {
+    List<DropdownMenuItem<String>> dropDownItems = [];
+    for (String des in printOptions) {
+      var item = DropdownMenuItem(
+        value: des,
+        child: Text(
+          des,
+          style: kTextStyle.copyWith(
+              overflow: TextOverflow.ellipsis, color: kTitleColor),
+        ),
+      );
+      dropDownItems.add(item);
+    }
+    return DropdownButton(
+      items: dropDownItems,
+      value: selectedPrintOption,
+      onChanged: (value) {
+        setState(() {
+          cartList.clear();
+          selectedPrintOption = value!;
+          SessionManager.isA4 = value == 'A4' ? true : false;
+        });
+      },
+    );
+  }
+
   DateTime selectedDueDate = DateTime.now();
 
   Future<void> _selectedDueDate(BuildContext context) async {
@@ -1441,7 +1473,7 @@ class _PosSaleState extends State<PosSale> {
                                     );
                                   }),
 
-                                  ///____________customer_type__________________________________________________________________
+                                  ///____________Printer Type__________________________________________________________________
                                   Expanded(
                                     child: Card(
                                       color: Colors.white,
@@ -1468,6 +1500,40 @@ class _PosSaleState extends State<PosSale> {
                                               child:
                                                   DropdownButtonHideUnderline(
                                                       child: getCategories())),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  ///____________customer_type__________________________________________________________________
+                                  SizedBox(
+                                    width: 200,
+                                    child: Card(
+                                      color: Colors.white,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        side: const BorderSide(
+                                            color: kLitGreyColor),
+                                      ),
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5.0),
+                                          child: Theme(
+                                              data: ThemeData(
+                                                  highlightColor:
+                                                      dropdownItemColor,
+                                                  focusColor: Colors
+                                                      .transparent,
+                                                  hoverColor:
+                                                      dropdownItemColor),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                      child:
+                                                          getPrintOptions())),
                                         ),
                                       ),
                                     ),
